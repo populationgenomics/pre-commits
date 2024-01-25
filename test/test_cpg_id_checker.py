@@ -1,7 +1,6 @@
-import io
 import tempfile
 import unittest
-from unittest.mock import Mock, patch, call
+from unittest.mock import Mock, call, patch
 
 from pre_commit_hooks.cpg_id_checker import main as cpg_id_checker_main
 
@@ -16,7 +15,7 @@ class CPGIDChecker(unittest.TestCase):
         contents = """
         This is a test file with no CPG IDs
         CPG 1
-        CPG\d
+        CPG\\d
         CPGabc
         """
 
@@ -38,12 +37,18 @@ class CPGIDChecker(unittest.TestCase):
             # check that sys.exit was called with 1
             mock_sys_exit.assert_called_once_with(1)
             self.assertEqual(2, mock_print.call_count)
-            mock_print.assert_has_calls([
-                call(f'{f.name}:'),
-                call(f'  1: Has pattern "[CX]PG\\d+": {contents.strip()}'),
-            ])
+            mock_print.assert_has_calls(
+                [
+                    call(f'{f.name}:'),
+                    call(f'  1: Has pattern "[CX]PG\\d+": {contents.strip()}'),
+                ],
+            )
 
-    def test_fail_with_cpg_id_on_second_line(self, mock_sys_exit: Mock, mock_print: Mock):
+    def test_fail_with_cpg_id_on_second_line(
+        self,
+        mock_sys_exit: Mock,
+        mock_print: Mock,
+    ):
         # create temporary file with contents
         contents = """Test file with CPG ID on second line\nID is: CPG123456\n"""
 
@@ -54,10 +59,12 @@ class CPGIDChecker(unittest.TestCase):
             # check that sys.exit was called with 1
             mock_sys_exit.assert_called_once_with(1)
             self.assertEqual(2, mock_print.call_count)
-            mock_print.assert_has_calls([
-                call(f'{f.name}:'),
-                call(f'  2: Has pattern "[CX]PG\\d+": ID is: CPG123456'),
-            ])
+            mock_print.assert_has_calls(
+                [
+                    call(f'{f.name}:'),
+                    call('  2: Has pattern "[CX]PG\\d+": ID is: CPG123456'),
+                ],
+            )
 
     def test_fail_with_extra_pattern(self, mock_sys_exit: Mock, mock_print: Mock):
         # create temporary file with contents
@@ -66,11 +73,13 @@ class CPGIDChecker(unittest.TestCase):
         with tempfile.NamedTemporaryFile(mode='w+') as f:
             f.write(contents)
             f.seek(0)
-            cpg_id_checker_main(['--extra-pattern', 'ABC\d+', f.name])
+            cpg_id_checker_main(['--extra-pattern', 'ABC\\d+', f.name])
             # check that sys.exit was called with 1
             mock_sys_exit.assert_called_once_with(1)
             self.assertEqual(2, mock_print.call_count)
-            mock_print.assert_has_calls([
-                call(f'{f.name}:'),
-                call(f'  2: Has pattern "ABC\d+": ID is: ABC123456'),
-            ])
+            mock_print.assert_has_calls(
+                [
+                    call(f'{f.name}:'),
+                    call('  2: Has pattern "ABC\\d+": ID is: ABC123456'),
+                ],
+            )
