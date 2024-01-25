@@ -18,6 +18,6 @@ setup(
     packages=["pre_commit_hooks"],
     install_requires=[],
     entry_points={
-        "console_scripts": ["cpg_id_checker = pre_commit_hooks.cpg_id_checker:main"],
+        "console_scripts": ["cpg-id-checker = pre_commit_hooks.cpg_id_checker:main"],
     },
 )
