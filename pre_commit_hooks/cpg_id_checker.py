@@ -29,6 +29,10 @@ def check_file(file_path: str, extra_patterns: list[Pattern[str]]) -> bool:
         # Ignore files that can't be opened (e.g., deleted files)
         pass
 
+    if has_forbidden_pattern:
+        # Print a blank line to separate output from different files
+        print()
+
     return has_forbidden_pattern
 
 
