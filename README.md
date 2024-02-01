@@ -1,6 +1,6 @@
 # Pre-commits
 
-This repository contains 
+This repository contains
 
 ## Usage
 
@@ -35,4 +35,5 @@ Each pre-commit hook is:
         },
     )
     ```
+
 - Added as an available option (based on the console-script name) in the `.pre-commit-hooks.yaml`.
