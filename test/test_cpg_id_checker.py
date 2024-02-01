@@ -36,11 +36,13 @@ class CPGIDChecker(unittest.TestCase):
             cpg_id_checker_main([f.name])
             # check that sys.exit was called with 1
             mock_sys_exit.assert_called_once_with(1)
-            self.assertEqual(2, mock_print.call_count)
+            # once for file, once for line, once for blank line
+            self.assertEqual(3, mock_print.call_count)
             mock_print.assert_has_calls(
                 [
                     call(f'{f.name}:'),
                     call(f'  1: Has pattern "[CX]PG\\d+": {contents.strip()}'),
+                    call(),
                 ],
             )
 
@@ -58,11 +60,13 @@ class CPGIDChecker(unittest.TestCase):
             cpg_id_checker_main([f.name])
             # check that sys.exit was called with 1
             mock_sys_exit.assert_called_once_with(1)
-            self.assertEqual(2, mock_print.call_count)
+            # once for file, once for line, once for blank line
+            self.assertEqual(3, mock_print.call_count)
             mock_print.assert_has_calls(
                 [
                     call(f'{f.name}:'),
                     call('  2: Has pattern "[CX]PG\\d+": ID is: CPG123456'),
+                    call(),
                 ],
             )
 
@@ -76,10 +80,12 @@ class CPGIDChecker(unittest.TestCase):
             cpg_id_checker_main(['--extra-pattern', 'ABC\\d+', f.name])
             # check that sys.exit was called with 1
             mock_sys_exit.assert_called_once_with(1)
-            self.assertEqual(2, mock_print.call_count)
+            # once for file, once for line, once for blank line
+            self.assertEqual(3, mock_print.call_count)
             mock_print.assert_has_calls(
                 [
                     call(f'{f.name}:'),
                     call('  2: Has pattern "ABC\\d+": ID is: ABC123456'),
+                    call(),
                 ],
             )
