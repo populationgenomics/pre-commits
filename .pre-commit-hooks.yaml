@@ -1,0 +1,6 @@
+- id: cpg-id-checker
+  name: Detect CPG / XPG IDs
+  description: This hook checks for CPG / XPG IDs
+  entry: cpg-id-checker
+  language: python
+  types: [file]
